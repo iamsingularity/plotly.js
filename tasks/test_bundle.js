@@ -5,7 +5,6 @@ var runSeries = require('run-series');
 
 var constants = require('./util/constants');
 var pathToJasmineBundleTests = constants.pathToJasmineBundleTests;
-var EXIT_CODE = 0;
 
 /**
  * Run all jasmine 'bundle' test in series
@@ -35,15 +34,13 @@ glob(pathToJasmineBundleTests + '/*.js', function(err, files) {
     runSeries(tasks, function(err, results) {
         if(err) throw err;
 
-        console.log('\ntest-bundle summary:\n');
+        var failed = results.filter(function(r) { return r; });
 
-        results.forEach(function(r) {
-            if(r) {
-                EXIT_CODE = 1;
-                console.warn(r.cmd + ' failed');
-            }
-        });
-
-        process.exit(EXIT_CODE);
+        if(failed.length) {
+            console.log('\ntest-bundle summary:');
+            failed.forEach(function(r) { console.warn('- ' + r.cmd + ' failed'); });
+            console.log('');
+            process.exit(1);
+        }
     });
 });
