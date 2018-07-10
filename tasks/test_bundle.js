@@ -35,7 +35,7 @@ glob(pathToJasmineBundleTests + '/*.js', function(err, files) {
     runSeries(tasks, function(err, results) {
         if(err) throw err;
 
-        console.log('\ntest-bundle summary:\n')
+        console.log('\ntest-bundle summary:\n');
 
         results.forEach(function(r) {
             if(r) {
